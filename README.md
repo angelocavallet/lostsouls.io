@@ -7,13 +7,13 @@
 
 ### Build Docker container
     $ npm install
-    $ npm run docker-build
+    $ npm run build
 
 ### Run Docker container
-    $ npm run docker-run
+    $ npm run load
 
-### Stop Docker container
-    $ npm run docker-stop
+### Stop ALL Docker containers
+    $ npm run stop
 
 ### Rebuild & Reload Docker container
-    $ npm run docker-reload
+    $ npm run reload
