@@ -1,3 +1,6 @@
-node_modules
-build
-.idea
+/db
+/logs
+/node_modules
+/package-lock.json
+/.idea
+/certs

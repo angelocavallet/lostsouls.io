@@ -1,0 +1,24 @@
+{
+    "database": {
+        "path": "db/db.sqlite"
+    },
+    "log": {
+        "path": "logs/",
+        "maxLines": 200,
+        "levels": {
+            "debug": true,
+            "server": true,
+            "conn": true,
+            "info": true,
+            "warn": true,
+            "error": true
+        }
+    },
+    "connection": {
+        "port": 8443,
+        "secure": true,
+        "cert": "certs/csr.pem",
+        "privkey": "certs/key.pem",
+        "interface": "eth0"
+    }
+}

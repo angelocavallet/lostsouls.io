@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "lib": [
+        "ES2022",
+        "ES2021.String",
+        "DOM"
+      ],
+      "resolveJsonModule": true
+    }
+}
