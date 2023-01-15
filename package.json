@@ -1,0 +1,46 @@
+{
+  "name": "lostsouls.io",
+  "version": "1.0.0",
+  "description": "Game Server Socket",
+  "homepage": "https://github.com/angelocavallet/lostsouls.io#readme",
+  "author": "Ângelo Kusmann Cavalet",
+  "license": "ISC",
+  "keywords": [
+    "Game",
+    "Server",
+    "Socket"
+  ],
+  "main": "/app/app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelocavallet/lostsouls.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/angelocavallet/lostsouls.io/issues"
+  },
+  "scripts": {
+    "docker-build": "docker build -t angelocavalet/lostsouls-game-server .",
+    "docker-run": "docker run -d -t -p 8080:41500 angelocavalet/lostsouls-game-server",
+    "docker-stop": "docker stop $(docker container ls -q)",
+    "docker-reload": "npm run docker-stop \n npm run docker-build \n npm run docker-run",
+
+    "babel-node": "babel-node --presets=@babel/preset-flow",
+    "start": "nodemon --exec npm run babel-node -- ./app/app.js"
+
+  },
+  "dependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-flow": "^7.18.6",
+    "@babel/register": "^7.18.9",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "babel-jest": "^29.3.1"
+  }
+}
