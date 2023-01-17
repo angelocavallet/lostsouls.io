@@ -6,6 +6,7 @@ import { TokenGenerator } from './utils';
 import { Token, AuthToken, CallbackToken } from './token';
 import { SignalGenerator } from './signal';
 
+
 ws.on("connection", async (client, req) => {
     log.conn(`Client connected from ${req.socket.remoteAddress?.replace('::ffff:', '')}`);
     const searchParams = new URLSearchParams(req.url?.replace('/', ''));

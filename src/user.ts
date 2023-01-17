@@ -33,9 +33,9 @@ export class User implements IUser {
         }
     }
     
-    toJSON(): string {
-        return JSON.stringify(this);
-    }
+    // toJSON(): string {
+    //     return JSON.stringify(this);
+    // }
 
     static async fetchUser(token: string): Promise<User | null> {
         const users = await db.get<User[]>('users');

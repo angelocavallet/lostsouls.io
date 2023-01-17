@@ -29,10 +29,32 @@ server.listen(port, () => {
     log.server(`Server started on ${getAddress()}:${port}`);
 })
 
-// server single-page application for debugging
-app.get('/', (req, res) => {
-    res.send(`Multiplayer game server for https://${getAddress()}:${port}`);
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/templates/index.html");
 });
+
+app.get("/chat", (req, res) => {
+    res.sendFile(__dirname + "/templates/chat.html");
+});
+
+log.info('Routes OK');
+
+// const connections = [];
+//
+// io.sockets.on("connection", socket => {
+//     connections.push(socket);
+//     console.log(" %s sockets is connected", connections.length);
+//
+//     socket.on("sending message", message => {
+//         console.log("Message is receiveds :", message);
+//
+//         io.sockets.emit("new message", { message: message });
+//     });
+//
+//     socket.on("disconnect", () => {
+//         connections.splice(connections.indexOf(socket), 1);
+//     });
+// });
 
 /**
  * The WebSocket server instance

@@ -21,8 +21,9 @@
   "scripts": {
     "build": "docker build -t angelocavalet/lostsouls-game-server .",
     "load": "docker run -d -p 8443:8443 -t angelocavalet/lostsouls-game-server",
-    "stop": "docker stop $(docker container list -q)",
-    "reload": "npm run build \n npm run load",
+    "stop": "docker stop $(docker container list -qf ancestor=angelocavalet/lostsouls-game-server)",
+    "clear": "docker rm $(docker container ls -qf ancestor=angelocavalet/lostsouls-game-server) --force ",
+    "reload": "npm run clear \n npm run build \n npm run load",
     "start": "npx ts-node ./src/server.ts"
   },
   "devDependencies": {
