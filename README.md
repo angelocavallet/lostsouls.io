@@ -1,7 +1,6 @@
-# lostsouls.io
+# lostsouls.io (Under Construction)
 
 ## NodeJS Game Server Socket
-
  Author: Ângelo Kusmann Cavalet
 
 
