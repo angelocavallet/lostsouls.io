@@ -20,5 +20,17 @@
         "cert": "certs/csr.pem",
         "privkey": "certs/key.pem",
         "interface": "eth0"
-    }
+    },
+    "routes": [
+        {
+            "name": "Index Page",
+            "url": "/",
+            "file": "/templates/index.html"
+        },
+        {
+            "name": "Chat Page",
+            "url": "/chat",
+            "file": "/templates/chat.html"
+        }
+    ]
 }

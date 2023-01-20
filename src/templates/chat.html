@@ -4,38 +4,93 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <title>Node.js Socket.io Chat Application</title>
+   <title>Node.js WebSocket Debug Application</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
    <div class="container">
       <h1 class="jumbotron">
-         NodeJS - Socket.io Chat Application
+         NodeJS - WebSocket Debug Application
       </h1>
       <div class="row" style="margin-top: 70px;">
          <div class="col-md-4"></div>
          <div class="col-md-6">
-            <div id="chatArea">
+            <div id="debugArea">
             </div>
             <form id="myForm">
                <div class="form-group">
                   Messages
-                  <textarea rows="5" id="txt" cols="5" class="form-control"></textarea>
+                  <textarea disabled rows="5" id="txt" cols="5" class="form-control"></textarea>
                </div>
                <div class="form-group">
-                  <button type="submit" class="btn btn-success">Send</button>
+                  <button disabled type="submit" id="submitBtn" class="btn btn-success">Send</button>
                </div>
             </form>
          </div>
       </div>
    </div>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-  jQuery(document).ready(function() {
-     var Socket = new WebSocket('wss://' + window.location.hostname + ':8443/');
+   document.addEventListener("DOMContentLoaded", function(event) {
+      let Socket = new WebSocket('wss://' + window.location.hostname + ':8443/');
+      let form = document.getElementById('myForm');
+      let txt = document.getElementById('txt');
+      let submitBtn = document.getElementById('submitBtn');
+      let debugArea = document.getElementById('debugArea');
 
-     Socket.send(JSON.stringify("pass your data here, and it'll be String"));
-  });
+      debugArea.createMessage = (message) => {
+         let divMessage = document.createElement('div');
+         divMessage.classList.add('well');
+         divMessage.textContent = message;
+         debugArea.appendChild(divMessage);
+      };
+
+      Socket.onopen = function () {
+         Socket.send(JSON.stringify({ type: "authentication"}));
+      }
+
+      let User = {
+         token: null,
+         enableMessage: false,
+         storeToken: (token) => {
+            User.token = token;
+         }
+      }
+      form.addEventListener('submit', (event) => {
+         event.preventDefault();
+
+         Socket.send(JSON.stringify({
+            type: "debug-message",
+            token: User.token,
+            data: txt.value
+         }));
+
+         txt.value = '';
+      });
+
+      Socket.onmessage = function (event) {
+         let message = JSON.parse(event.data);
+         console.log("Receiving server message")
+         console.log(message)
+         switch (message.type) {
+            case 'authentication':
+               if (message.token) {
+                  User.storeToken(message.token);
+                  debugArea.createMessage('Cliente conectado token ' + message.token);
+                  txt.disabled = false;
+                  submitBtn.disabled = false;
+               } else {
+                  debugArea.createMessage('Erro ' + message.data);
+               }
+               break;
+            case 'debug-message':
+               debugArea.createMessage('Message: ' + message.data);
+               break;
+            case 'position':
+               debugArea.createMessage('Position: ' + message.data);
+               break;
+         }
+      }
+   });
 </script>
 </body>
 </html>

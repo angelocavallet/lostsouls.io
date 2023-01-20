@@ -1,18 +1,19 @@
-// local dependencies
-import { db } from './database';
-import { AuthToken } from './token';
+import * as jwt from 'jsonwebtoken';
+import {db} from './database';
 
 type Connection = {
     connected: boolean;
     init: boolean;
+    lastTimeConnected: Date;
 };
 
 type UserInfo = {
     connection: Connection,
+    secretSHA3: string,
 };
 
 interface IUser {
-    token: AuthToken;
+    token: null
     info: UserInfo;
 }
 
@@ -20,37 +21,47 @@ interface IUser {
  * A data structure that represents a user
  * */
 export class User implements IUser {
-    token: AuthToken;
+    token: null;
     info: UserInfo;
 
-    constructor(token: AuthToken) {
-        this.token = token;
+    constructor() {
         this.info = {
+            secretSHA3: 'test',
             connection: {
                 connected: false,
-                init: false
+                init: false,
+                lastTimeConnected: new Date()
             }
         }
+        this.token = jwt.sign({data: 'authenticated'}, this.info.secretSHA3);
     }
-    
-    // toJSON(): string {
-    //     return JSON.stringify(this);
-    // }
 
     static async fetchUser(token: string): Promise<User | null> {
+
+
         const users = await db.get<User[]>('users');
         if (users) {
             const user = users.find(user => user.token === token);
             if (user) {
+                // try {
+                //     const data = jwt.verify(token, user.info.secretSHA3);
+                //     console.log(data);
+                // } catch (error) {
+                //     console.log('Invalid token');
+                // }
+
                 return user;
             }
-        }
-        else {
+        } else {
             await db.set<User[]>('users', []);
         }
         return null;
     }
-    
+
+    static async fetchAll(): Promise<User[] | null> {
+        return await db.get<User[]>('users');
+    }
+
     static async saveUser(user: User): Promise<void> {
         const users = await db.get<User[]>('users');
         if (users) {
@@ -60,8 +71,7 @@ export class User implements IUser {
                 await db.set<User[]>('users', users);
                 return;
             }
-        }
-        else {
+        } else {
             await db.set<User[]>('users', [user]);
         }
     }
