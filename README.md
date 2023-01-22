@@ -1,4 +1,4 @@
-# lostsouls.io (Under Construction)
+# lostsouls.io (Under Development)
 
 ## Game Server Socket
  Author: Ângelo Kusmann Cavalet
@@ -15,4 +15,7 @@
     $ npm run stop
 
 ### Rebuild & Reload Docker container
-    $ npm run reload
+    $ npm run reload  
+  
+## Chat message example:  
+    IP_ADDRESS:8443/chat  
